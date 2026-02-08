@@ -1,0 +1,612 @@
+{
+  "metrics_agg": {
+    "n_test_examples": 40,
+    "n_total_examples": 200,
+    "dots_k5_test_accuracy": 0.725,
+    "figs_aa_test_accuracy": 0.75,
+    "accuracy_gap_method_vs_baseline": -0.025,
+    "acc_figs_axis_aligned": 0.75,
+    "acc_figs_oblique": 0.775,
+    "acc_dots_K2": 0.725,
+    "acc_dots_K3": 0.725,
+    "acc_dots_K4": 0.725,
+    "acc_dots_K5": 0.725,
+    "acc_dots_K6": 0.725,
+    "acc_dots_K8": 0.725,
+    "acc_dots_K10": 0.725,
+    "acc_random_forest": 0.75,
+    "acc_decision_tree": 0.725,
+    "acc_logistic_regression": 0.625,
+    "mcnemar_p_value": 1.0,
+    "mcnemar_odds_ratio": 0.75,
+    "k_sweep_range": 0.0,
+    "k_sweep_cv": 0.0,
+    "k_sweep_spearman_rho": 0.0,
+    "stability_mean_cosine": 0.746988,
+    "stability_null_mean": 0.12061,
+    "stability_z_score": 6.9968,
+    "stability_uplift_ratio": 6.1934,
+    "k2_dominates_all": 1,
+    "verdict_score": 4,
+    "criteria_met": 1,
+    "criteria_partial": 2,
+    "criteria_not_met": 2,
+    "criteria_triggered": 1,
+    "dots_k5_ci_lower": 0.575,
+    "dots_k5_ci_upper": 0.85,
+    "dots_k5_boot_se": 0.069894,
+    "figs_aa_ci_lower": 0.6,
+    "figs_aa_ci_upper": 0.875
+  },
+  "examples": [
+    {
+      "input": "Classify the following tabular data sample:\n  F1R: 70.5115\n  F1S: 68.6717\n  F2R: 73.4257\n  F2S: 70.9376\n  F3R: 69.8081\n  F3S: 75.5893\n  F4R: 74.3434\n  F4S: 74.9221\n  F5R: 62.4270\n  F5S: 58.7198\n  F6R:...",
+      "output": "1",
+      "context": {
+        "features": {
+          "F1R": 70.511505,
+          "F1S": 68.671743,
+          "F2R": 73.425668,
+          "F2S": 70.937631,
+          "F3R": 69.808125,
+          "F3S": 75.589292,
+          "F4R": 74.343356,
+          "F4S": 74.922059,
+          "F5R": 62.426992,
+          "F5S": 58.719846,
+          "F6R": 74.291185,
+          "F6S": 68.143263,
+          "F7R": 72.162324,
+          "F7S": 71.783171,
+          "F8R": 65.89236,
+          "F8S": 61.455557,
+          "F9R": 63.925101,
+          "F9S": 68.274493,
+          "F10R": 62.567038,
+          "F10S": 69.537886,
+          "F11R": 75.719678,
+          "F11S": 73.466135,
+          "F12R": 67.905253,
+          "F12S": 67.649116,
+          "F13R": 74.248354,
+          "F13S": 74.968661,
+          "F14R": 77.888084,
+          "F14S": 58.041097,
+          "F15R": 66.727746,
+          "F15S": 56.856327,
+          "F16R": 72.484556,
+          "F16S": 70.613295,
+          "F17R": 61.052396,
+          "F17S": 62.334105,
+          "F18R": 70.617884,
+          "F18S": 73.220532,
+          "F19R": 66.216008,
+          "F19S": 67.006762,
+          "F20R": 71.312786,
+          "F20S": 64.124958,
+          "F21R": 72.611237,
+          "F21S": 55.54386,
+          "F22R": 56.053076,
+          "F22S": 62.460724
+        },
+        "n_features": 44,
+        "task_type": "binary_classification",
+        "dataset_source": "OpenML-797 benchmark suite",
+        "feature_type": "numeric",
+        "preprocessing": "none_needed_already_numeric",
+        "evaluation_results": {
+          "family1_bootstrap_ci": {
+            "dots_K5": {
+              "accuracy": {
+                "point": 0.725,
+                "mean": 0.724617,
+                "se": 0.069894,
+                "ci_lower": 0.575,
+                "ci_upper": 0.85
+              }
+            },
+            "figs_axis_aligned": {
+              "accuracy": {
+                "point": 0.75,
+                "mean": 0.749978,
+                "se": 0.068995,
+                "ci_lower": 0.6,
+                "ci_upper": 0.875
+              }
+            },
+            "figs_oblique": {
+              "accuracy": {
+                "point": 0.775,
+                "mean": 0.775,
+                "se": 0.066026,
+                "ci_lower": 0.64559,
+                "ci_upper": 0.90441
+              }
+            },
+            "dots_K2": {
+              "accuracy": {
+                "point": 0.725,
+                "mean": 0.725,
+                "se": 0.0706,
+                "ci_lower": 0.586624,
+                "ci_upper": 0.863376
+              }
+            },
+            "dots_K3": {
+              "accuracy": {
+                "point": 0.725,
+                "mean": 0.725,
+                "se": 0.0706,
+                "ci_lower": 0.586624,
+                "ci_upper": 0.863376
+              }
+            },
+            "dots_K4": {
+              "accuracy": {
+                "point": 0.725,
+                "mean": 0.725,
+                "se": 0.0706,
+                "ci_lower": 0.586624,
+                "ci_upper": 0.863376
+              }
+            },
+            "dots_K6": {
+              "accuracy": {
+                "point": 0.725,
+                "mean": 0.725,
+                "se": 0.0706,
+                "ci_lower": 0.586624,
+                "ci_upper": 0.863376
+              }
+            },
+            "dots_K8": {
+              "accuracy": {
+                "point": 0.725,
+                "mean": 0.725,
+                "se": 0.0706,
+                "ci_lower": 0.586624,
+                "ci_upper": 0.863376
+              }
+            },
+            "dots_K10": {
+              "accuracy": {
+                "point": 0.725,
+                "mean": 0.725,
+                "se": 0.0706,
+                "ci_lower": 0.586624,
+                "ci_upper": 0.863376
+              }
+            },
+            "random_forest": {
+              "accuracy": {
+                "point": 0.75,
+                "mean": 0.75,
+                "se": 0.068465,
+                "ci_lower": 0.615808,
+                "ci_upper": 0.884192
+              }
+            },
+            "decision_tree": {
+              "accuracy": {
+                "point": 0.725,
+                "mean": 0.725,
+                "se": 0.0706,
+                "ci_lower": 0.586624,
+                "ci_upper": 0.863376
+              }
+            },
+            "logistic_regression": {
+              "accuracy": {
+                "point": 0.625,
+                "mean": 0.625,
+                "se": 0.076547,
+                "ci_lower": 0.474969,
+                "ci_upper": 0.775031
+              }
+            }
+          },
+          "family2_mcnemar": [
+            {
+              "table": [
+                [
+                  26,
+                  3
+                ],
+                [
+                  4,
+                  7
+                ]
+              ],
+              "chi2": null,
+              "p_value": 1.0,
+              "odds_ratio": 0.75,
+              "test_type": "exact_binomial",
+              "method_a": "dots_K5",
+              "method_b": "figs_axis_aligned",
+              "significant_at_005": false,
+              "significant_at_010": false,
+              "p_adjusted": 1.0
+            }
+          ],
+          "family3_k_sweep": {
+            "k_values": [
+              10,
+              2,
+              3
+            ],
+            "accuracies": [
+              0.725,
+              0.725,
+              0.725
+            ],
+            "range": 0.0,
+            "cv": 0.0,
+            "mean": 0.725,
+            "std": 0.0,
+            "spearman_rho": 0.0,
+            "spearman_p": 1.0,
+            "slope": 0.0,
+            "r_squared": 0.0,
+            "slope_p": 1.0,
+            "kappa_vs_k2": {
+              "K10": 1.0,
+              "K3": 1.0,
+              "K4": 1.0,
+              "K5": 1.0,
+              "K6": 1.0,
+              "K8": 1.0
+            },
+            "nmi_k_correctness": 0.0,
+            "flatness_classification": "flat",
+            "interpretation": "All DOTS K values produce identical test accuracy (0.725). The K-sweep is perfectly flat with zero variance. This means the dictionary size constraint has NO effect on predictive accuracy — K=2 is suf..."
+          },
+          "family4_stability": {
+            "observed_pairwise_similarities": [
+              0.694568,
+              0.639089,
+              0.843655
+            ],
+            "observed_mean": 0.746988,
+            "observed_std": 0.079511,
+            "null_analytical_mean": 0.121676,
+            "null_simulated_mean": 0.12061,
+            "null_simulated_std": 0.089524,
+            "null_matched_dict": {
+              "K3": {
+                "mean": 0.179212,
+                "std": 0.04671
+              },
+              "K5": {
+                "mean": 0.21257,
+                "std": 0.034073
+              }
+            },
+            "z_score": 6.9968,
+            "p_value": 0.0,
+            "stability_uplift_ratio": 6.1934,
+            "per_k_results": {
+              "K3": {
+                "mean_cosine": 0.765095,
+                "n_pairs": 10,
+                "min_sim": 0.639089,
+                "max_sim": 0.917113,
+                "fold_accuracies": [
+                  0.75,
+                  0.75,
+                  0.75
+                ]
+              },
+              "K5": {
+                "mean_cosine": 0.728881,
+                "n_pairs": 10,
+                "min_sim": 0.667515,
+                "max_sim": 0.834296,
+                "fold_accuracies": [
+                  0.75,
+                  0.75,
+                  0.75
+                ]
+              }
+            },
+            "per_k_z_scores": {
+              "K3": {
+                "z_score": 12.543,
+                "p_value": 0.0,
+                "null_mean": 0.179212
+              },
+              "K5": {
+                "z_score": 15.1531,
+                "p_value": 0.0,
+                "null_mean": 0.21257
+              }
+            },
+            "conclusion": "Dictionary stability (0.747) is 6.2x the null expectation (0.121), z=7.0, p<1.3e-12. The learned directions capture genuine data structure, not random noise."
+          },
+          "family5_pareto": {
+            "all_configs": [
+              {
+                "method": "dots_K2",
+                "K": 2,
+                "accuracy": 0.725,
+                "n_splits": 15
+              },
+              {
+                "method": "dots_K3",
+                "K": 3,
+                "accuracy": 0.725,
+                "n_splits": 15
+              },
+              {
+                "method": "dots_K4",
+                "K": 4,
+                "accuracy": 0.725,
+                "n_splits": 15
+              }
+            ],
+            "pareto_front": [
+              {
+                "method": "dots_K2",
+                "K": 2,
+                "accuracy": 0.725,
+                "n_splits": 15
+              },
+              {
+                "method": "figs_oblique",
+                "K": 44,
+                "accuracy": 0.775,
+                "n_splits": 0
+              }
+            ],
+            "dominated_configs": [
+              {
+                "method": "dots_K3",
+                "K": 3,
+                "accuracy": 0.725,
+                "n_splits": 15
+              },
+              {
+                "method": "dots_K4",
+                "K": 4,
+                "accuracy": 0.725,
+                "n_splits": 15
+              },
+              {
+                "method": "dots_K5",
+                "K": 5,
+                "accuracy": 0.725,
+                "n_splits": 15
+              }
+            ],
+            "k2_dominates_all_dots": true,
+            "dominance_details": [
+              {
+                "method": "dots_K3",
+                "k2_acc": 0.725,
+                "other_acc": 0.725,
+                "acc_diff": 0.0,
+                "k2_dominates": true,
+                "dominance_type": "weak"
+              },
+              {
+                "method": "dots_K4",
+                "k2_acc": 0.725,
+                "other_acc": 0.725,
+                "acc_diff": 0.0,
+                "k2_dominates": true,
+                "dominance_type": "weak"
+              },
+              {
+                "method": "dots_K5",
+                "k2_acc": 0.725,
+                "other_acc": 0.725,
+                "acc_diff": 0.0,
+                "k2_dominates": true,
+                "dominance_type": "weak"
+              }
+            ],
+            "interpretation": "K=2 weakly Pareto-dominates all higher DOTS K values (identical accuracy, fewer concepts). The Pareto frontier is degenerate: no accuracy-interpretability tradeoff exists. K=2 achieves the same accura..."
+          },
+          "family6_verdict": {
+            "criteria": [
+              {
+                "id": "SC1",
+                "description": "DOTS K=3-6 within 1-2% of RO-FIGS on >=70% datasets",
+                "evidence_summary": "On this dataset: DOTS best (K=3-6) = 0.725, FIGS oblique = 0.775, gap = 0.050 (5.0%). Gap exceeds 2% threshold (5.0%). Single dataset cannot assess 70% threshold.",
+                "statistical_values": {
+                  "dots_best_acc": 0.725,
+                  "figs_oblique_acc": 0.775,
+                  "accuracy_gap": 0.05,
+                  "within_2pct": false
+                },
+                "verdict": "NOT_MET"
+              },
+              {
+                "id": "SC2",
+                "description": "Substantially fewer unique directions than RO-FIGS",
+                "evidence_summary": "DOTS K=2 uses 2 directions vs FIGS oblique's up to 44 (ratio: 0.05). DOTS K=6 uses 6 directions (ratio: 0.14). DOTS achieves 22x to 7x fewer directions — clearly substantial.",
+                "statistical_values": {
+                  "figs_oblique_max_dirs": 44,
+                  "dots_k2_dirs": 2,
+                  "dots_k6_dirs": 6,
+                  "reduction_ratio_k2": 0.0455,
+                  "reduction_ratio_k6": 0.1364
+                },
+                "verdict": "MET"
+              },
+              {
+                "id": "SC3",
+                "description": "Dictionary stability cosine similarity > 0.8",
+                "evidence_summary": "K=3: 0.765, K=5: 0.729, mean: 0.747. Below 0.8 threshold but far above null (0.121). Z-score: 7.0. Directions are highly non-random but below the ambitious 0.8 target.",
+                "statistical_values": {
+                  "k3_cosine": 0.765095,
+                  "k5_cosine": 0.728881,
+                  "mean_cosine": 0.746988,
+                  "threshold": 0.8,
+                  "above_threshold": false,
+                  "z_score_vs_null": 6.9968
+                },
+                "verdict": "PARTIALLY_MET"
+              }
+            ],
+            "overall_verdict": "PARTIALLY_SUPPORTED",
+            "verdict_justification": "The DOTS hypothesis receives mixed support. SC2 (fewer directions) is clearly met: DOTS uses 2-6 directions vs 44 for unconstrained FIGS. SC3 (stability) is partially met: cosine similarity of 0.75 is...",
+            "summary_counts": {
+              "met": 1,
+              "partially_met": 2,
+              "not_met": 2,
+              "triggered": 1
+            },
+            "limitations": [
+              "Single dataset (OpenML-797) — cannot assess generalizability",
+              "Per-example predictions only available for dots_K5 vs figs_axis_aligned",
+              "Small test set (n=40) limits statistical power for McNemar tests"
+            ],
+            "future_work": [
+              "Evaluate on multiple diverse datasets to test generalizability",
+              "Investigate why all DOTS K values produce identical predictions",
+              "Compare against stronger oblique tree baselines (e.g., CART-oblique)"
+            ]
+          }
+        }
+      },
+      "dataset": "imodels/tabular-benchmark-797-classification",
+      "split": "train",
+      "predict_baseline": "1",
+      "predict_method": "1",
+      "method": "dots_K5",
+      "eval_correct_method": 1,
+      "eval_correct_baseline": 1,
+      "eval_agree": 1
+    },
+    {
+      "input": "Classify the following tabular data sample:\n  F1R: 55.0406\n  F1S: 75.0266\n  F2R: 65.0128\n  F2S: 71.1990\n  F3R: 69.4850\n  F3S: 66.4147\n  F4R: 73.1449\n  F4S: 74.7500\n  F5R: 63.8450\n  F5S: 47.6606\n  F6R:...",
+      "output": "0",
+      "context": {
+        "features": {
+          "F1R": 55.040603,
+          "F1S": 75.026624,
+          "F2R": 65.012768,
+          "F2S": 71.199008,
+          "F3R": 69.484965,
+          "F3S": 66.414715,
+          "F4R": 73.144932,
+          "F4S": 74.749982,
+          "F5R": 63.844958,
+          "F5S": 47.660637,
+          "F6R": 72.84605,
+          "F6S": 71.142237,
+          "F7R": 69.685788,
+          "F7S": 67.301352,
+          "F8R": 47.581789,
+          "F8S": 56.317329,
+          "F9R": 76.692806,
+          "F9S": 70.393342,
+          "F10R": 70.856711,
+          "F10S": 48.573269,
+          "F11R": 77.586105,
+          "F11S": 59.077339,
+          "F12R": 68.653648,
+          "F12S": 71.723587,
+          "F13R": 61.319928,
+          "F13S": 60.248435,
+          "F14R": 66.80939,
+          "F14S": 67.217242,
+          "F15R": 58.308323,
+          "F15S": 69.928279,
+          "F16R": 68.492442,
+          "F16S": 48.726294,
+          "F17R": 40.402903,
+          "F17S": 63.295277,
+          "F18R": 48.584012,
+          "F18S": 71.878175,
+          "F19R": 48.471934,
+          "F19S": 70.152586,
+          "F20R": 63.41311,
+          "F20S": 70.856657,
+          "F21R": 72.593045,
+          "F21S": 78.62149,
+          "F22R": 57.554272,
+          "F22S": 61.734926
+        },
+        "n_features": 44,
+        "task_type": "binary_classification",
+        "dataset_source": "OpenML-797 benchmark suite",
+        "feature_type": "numeric",
+        "preprocessing": "none_needed_already_numeric"
+      },
+      "dataset": "imodels/tabular-benchmark-797-classification",
+      "split": "train",
+      "predict_baseline": "1",
+      "predict_method": "1",
+      "method": "dots_K5",
+      "eval_correct_method": 0,
+      "eval_correct_baseline": 0,
+      "eval_agree": 1
+    },
+    {
+      "input": "Classify the following tabular data sample:\n  F1R: 63.5548\n  F1S: 52.9832\n  F2R: 60.0778\n  F2S: 60.4591\n  F3R: 44.8623\n  F3S: 59.5678\n  F4R: 74.5612\n  F4S: 80.6465\n  F5R: 61.8002\n  F5S: 62.5087\n  F6R:...",
+      "output": "1",
+      "context": {
+        "features": {
+          "F1R": 63.554782,
+          "F1S": 52.983165,
+          "F2R": 60.077782,
+          "F2S": 60.459062,
+          "F3R": 44.862288,
+          "F3S": 59.567838,
+          "F4R": 74.561229,
+          "F4S": 80.646485,
+          "F5R": 61.800248,
+          "F5S": 62.50865,
+          "F6R": 76.91681,
+          "F6S": 78.199076,
+          "F7R": 76.412578,
+          "F7S": 64.514819,
+          "F8R": 58.754494,
+          "F8S": 58.308706,
+          "F9R": 35.851271,
+          "F9S": 65.71916,
+          "F10R": 71.688791,
+          "F10S": 65.305414,
+          "F11R": 79.282058,
+          "F11S": 79.123526,
+          "F12R": 71.648667,
+          "F12S": 75.224795,
+          "F13R": 31.532748,
+          "F13S": 19.572599,
+          "F14R": 44.684151,
+          "F14S": 26.44583,
+          "F15R": 61.952338,
+          "F15S": 59.471863,
+          "F16R": 72.575938,
+          "F16S": 71.839251,
+          "F17R": 58.185494,
+          "F17S": 64.516538,
+          "F18R": 59.749603,
+          "F18S": 61.322201,
+          "F19R": 75.907469,
+          "F19S": 72.112163,
+          "F20R": 72.317805,
+          "F20S": 63.482745,
+          "F21R": 75.846486,
+          "F21S": 66.567848,
+          "F22R": 68.884922,
+          "F22S": 30.739544
+        },
+        "n_features": 44,
+        "task_type": "binary_classification",
+        "dataset_source": "OpenML-797 benchmark suite",
+        "feature_type": "numeric",
+        "preprocessing": "none_needed_already_numeric"
+      },
+      "dataset": "imodels/tabular-benchmark-797-classification",
+      "split": "test",
+      "predict_baseline": "1",
+      "predict_method": "1",
+      "method": "dots_K5",
+      "eval_correct_method": 1,
+      "eval_correct_baseline": 1,
+      "eval_agree": 1
+    }
+  ]
+}

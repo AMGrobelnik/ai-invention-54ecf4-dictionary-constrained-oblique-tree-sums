@@ -1,0 +1,7 @@
+Metadata-Version: 2.4
+Name: dots-eval
+Version: 0.1.0
+Summary: Rigorous statistical evaluation of DOTS experiment
+Requires-Python: <3.12,>=3.10
+Requires-Dist: numpy<2.3.0,>=1.26.0
+Requires-Dist: scipy>=1.11.0

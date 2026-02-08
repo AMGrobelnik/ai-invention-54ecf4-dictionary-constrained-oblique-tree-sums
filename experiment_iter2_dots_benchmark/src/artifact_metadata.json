@@ -1,0 +1,4 @@
+{
+  "title": "dots_benchmark",
+  "summary": "DOTS (Dictionary-Constrained Oblique Tree Sums) experiment on OpenML-797 tabular benchmark (200 examples, 44 features, binary classification). Implements custom FIGS-style greedy tree growth engine with axis-aligned, oblique unconstrained, and dictionary-constrained split modes. K-sweep over K=2,3,4,5,6,8,10 with PCA-initialized dictionaries and 3-round alternating optimization. Baselines: RandomForest, DecisionTree, LogisticRegression, FIGS axis-aligned, FIGS oblique. 5-fold CV dictionary stability analysis with Hungarian matching. Results: DOTS 72.5% accuracy (all K), FIGS AA 75%, FIGS oblique 77.5%, RF 75%. Dictionary stability strong (cosine 0.77 K=3, 0.73 K=5). Runtime ~75s for full 200 examples. Outputs: method.py (1160 lines), method_out.json (200 examples), full/mini/preview variants. All validated against exp_gen_sol_out schema."
+}

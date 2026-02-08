@@ -1,0 +1,4 @@
+{
+  "title": "tabular_bench",
+  "summary": "OpenML-797 tabular classification benchmark dataset (imodels/tabular-benchmark-797-classification) with 200 sampled examples from 3,000 total. Each example has 44 pure numeric features (F1R\u2013F22R, F1S\u2013F22S) and a binary target (0/1, class balance 73.5% positive). Sourced from the OpenML-797 benchmark suite used in RO-FIGS and interpretable ML research. Format: JSON with 'examples' array; each example contains 'input' (text-formatted features), 'context' (feature dict + metadata), 'output' (label), 'dataset', and 'split'. Use full_data_out.json for experiments, mini_data_out.json (3 examples) for dev/testing, preview_data_out.json for inspection. Run `uv run data.py` to regenerate from source."
+}

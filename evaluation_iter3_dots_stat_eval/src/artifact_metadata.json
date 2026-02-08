@@ -1,0 +1,4 @@
+{
+  "title": "DOTS_stat_eval",
+  "summary": "Rigorous 6-family statistical evaluation of DOTS experiment on OpenML-797 (200 examples, 44 features). Family 1: Bootstrap CIs (10K resamples) \u2014 DOTS 72.5% [57.5%, 85.0%], FIGS-AA 75.0% [60.0%, 87.5%]. Family 2: McNemar test DOTS vs FIGS-AA p=1.0, OR=0.75 (no significant difference). Family 3: K-sweep perfectly flat (range=0.0, all K give identical 72.5%). Family 4: Dictionary stability 0.747 mean cosine, z=7.0 vs null (0.121), 6.2x uplift \u2014 highly significant non-random structure. Family 5: K=2 weakly Pareto-dominates all higher K (degenerate frontier). Family 6: Verdict PARTIALLY_SUPPORTED \u2014 SC2 met (22x fewer directions), SC3 partially met (0.75 vs 0.8 threshold but z=7 vs null), SC1/SC4 not met (5% gap, flat sweep). Key finding: dictionary constraint is accuracy-free (flat K-sweep) with strong stability, but 5% gap vs oblique FIGS and single-dataset limitation prevent full confirmation."
+}

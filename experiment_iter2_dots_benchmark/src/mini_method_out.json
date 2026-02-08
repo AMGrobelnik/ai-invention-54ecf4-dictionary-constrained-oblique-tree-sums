@@ -1,0 +1,361 @@
+{
+  "examples": [
+    {
+      "input": "Classify the following tabular data sample:\n  F1R: 70.5115\n  F1S: 68.6717\n  F2R: 73.4257\n  F2S: 70.9376\n  F3R: 69.8081\n  F3S: 75.5893\n  F4R: 74.3434\n  F4S: 74.9221\n  F5R: 62.4270\n  F5S: 58.7198\n  F6R: 74.2912\n  F6S: 68.1433\n  F7R: 72.1623\n  F7S: 71.7832\n  F8R: 65.8924\n  F8S: 61.4556\n  F9R: 63.9251\n  F9S: 68.2745\n  F10R: 62.5670\n  F10S: 69.5379\n  F11R: 75.7197\n  F11S: 73.4661\n  F12R: 67.9053\n  F12S: 67.6491\n  F13R: 74.2484\n  F13S: 74.9687\n  F14R: 77.8881\n  F14S: 58.0411\n  F15R: 66.7277\n  F15S: 56.8563\n  F16R: 72.4846\n  F16S: 70.6133\n  F17R: 61.0524\n  F17S: 62.3341\n  F18R: 70.6179\n  F18S: 73.2205\n  F19R: 66.2160\n  F19S: 67.0068\n  F20R: 71.3128\n  F20S: 64.1250\n  F21R: 72.6112\n  F21S: 55.5439\n  F22R: 56.0531\n  F22S: 62.4607",
+      "output": "1",
+      "context": {
+        "features": {
+          "F1R": 70.511505,
+          "F1S": 68.671743,
+          "F2R": 73.425668,
+          "F2S": 70.937631,
+          "F3R": 69.808125,
+          "F3S": 75.589292,
+          "F4R": 74.343356,
+          "F4S": 74.922059,
+          "F5R": 62.426992,
+          "F5S": 58.719846,
+          "F6R": 74.291185,
+          "F6S": 68.143263,
+          "F7R": 72.162324,
+          "F7S": 71.783171,
+          "F8R": 65.89236,
+          "F8S": 61.455557,
+          "F9R": 63.925101,
+          "F9S": 68.274493,
+          "F10R": 62.567038,
+          "F10S": 69.537886,
+          "F11R": 75.719678,
+          "F11S": 73.466135,
+          "F12R": 67.905253,
+          "F12S": 67.649116,
+          "F13R": 74.248354,
+          "F13S": 74.968661,
+          "F14R": 77.888084,
+          "F14S": 58.041097,
+          "F15R": 66.727746,
+          "F15S": 56.856327,
+          "F16R": 72.484556,
+          "F16S": 70.613295,
+          "F17R": 61.052396,
+          "F17S": 62.334105,
+          "F18R": 70.617884,
+          "F18S": 73.220532,
+          "F19R": 66.216008,
+          "F19S": 67.006762,
+          "F20R": 71.312786,
+          "F20S": 64.124958,
+          "F21R": 72.611237,
+          "F21S": 55.54386,
+          "F22R": 56.053076,
+          "F22S": 62.460724
+        },
+        "n_features": 44,
+        "task_type": "binary_classification",
+        "dataset_source": "OpenML-797 benchmark suite",
+        "feature_type": "numeric",
+        "preprocessing": "none_needed_already_numeric",
+        "dots_full_results": {
+          "method_accuracies": {
+            "figs_axis_aligned": 0.75,
+            "figs_oblique": 0.775,
+            "dots_K2": 0.725,
+            "dots_K3": 0.725,
+            "dots_K4": 0.725,
+            "dots_K5": 0.725,
+            "dots_K6": 0.725,
+            "dots_K8": 0.725,
+            "dots_K10": 0.725,
+            "random_forest": 0.75,
+            "decision_tree": 0.725,
+            "logistic_regression": 0.625
+          },
+          "k_sweep_accuracies": {
+            "K=2": 0.725,
+            "K=3": 0.725,
+            "K=4": 0.725,
+            "K=5": 0.725,
+            "K=6": 0.725,
+            "K=8": 0.725,
+            "K=10": 0.725
+          },
+          "stability_analysis": {
+            "K3": {
+              "fold_accuracies": [
+                0.75,
+                0.75,
+                0.75,
+                0.71875,
+                0.71875
+              ],
+              "mean_accuracy": 0.7375,
+              "std_accuracy": 0.015309310892394862,
+              "mean_cosine_similarity": 0.765094548556613,
+              "pairwise_similarities": [
+                0.6945682991496013,
+                0.6390894169214528,
+                0.8436551361295049,
+                0.8306458672594056,
+                0.8999199008102993,
+                0.6448878950746127,
+                0.7290342412836174,
+                0.6760751559000249,
+                0.7759567695905144,
+                0.9171128034470962
+              ]
+            },
+            "K5": {
+              "fold_accuracies": [
+                0.75,
+                0.75,
+                0.75,
+                0.71875,
+                0.71875
+              ],
+              "mean_accuracy": 0.7375,
+              "std_accuracy": 0.015309310892394862,
+              "mean_cosine_similarity": 0.7288814885173924,
+              "pairwise_similarities": [
+                0.7038400762209336,
+                0.7510334609852769,
+                0.6675149079432254,
+                0.6777160801211944,
+                0.7086405841236617,
+                0.7844949179350393,
+                0.7095185798036514,
+                0.7479328445189498,
+                0.7038273053603386,
+                0.8342961281616528
+              ]
+            }
+          },
+          "pareto_frontier": [
+            {
+              "K": 2,
+              "test_accuracy": 0.725,
+              "n_unique_directions": 2,
+              "n_splits": 15,
+              "direction_names": [
+                "Concept_1: +0.35*F22S +0.35*F21R +0.33*F22R",
+                "Concept_2: +0.38*F15S +0.37*F15R +0.30*F20S"
+              ]
+            },
+            {
+              "K": 3,
+              "test_accuracy": 0.725,
+              "n_unique_directions": 3,
+              "n_splits": 15,
+              "direction_names": [
+                "Concept_1: +0.35*F22S +0.35*F21R +0.33*F22R",
+                "Concept_2: +0.38*F15S +0.37*F15R +0.30*F20S",
+                "Concept_3: +0.38*F6S -0.30*F1S +0.28*F19R"
+              ]
+            },
+            {
+              "K": 4,
+              "test_accuracy": 0.725,
+              "n_unique_directions": 4,
+              "n_splits": 15,
+              "direction_names": [
+                "Concept_1: +0.35*F22S +0.35*F21R +0.33*F22R",
+                "Concept_2: +0.38*F15S +0.37*F15R +0.30*F20S",
+                "Concept_3: +0.38*F6S -0.30*F1S +0.28*F19R",
+                "Concept_4: +0.36*F8R +0.33*F9R +0.28*F8S"
+              ]
+            },
+            {
+              "K": 5,
+              "test_accuracy": 0.725,
+              "n_unique_directions": 5,
+              "n_splits": 15,
+              "direction_names": [
+                "Concept_1: +0.35*F22S +0.35*F21R +0.33*F22R",
+                "Concept_2: +0.38*F15S +0.37*F15R +0.30*F20S",
+                "Concept_3: +0.38*F6S -0.30*F1S +0.28*F19R",
+                "Concept_4: +0.36*F8R +0.33*F9R +0.28*F8S",
+                "Concept_5: +0.34*F10R +0.32*F14R -0.31*F12S"
+              ]
+            },
+            {
+              "K": 6,
+              "test_accuracy": 0.725,
+              "n_unique_directions": 6,
+              "n_splits": 15,
+              "direction_names": [
+                "Concept_1: +0.35*F22S +0.35*F21R +0.33*F22R",
+                "Concept_2: +0.38*F15S +0.37*F15R +0.30*F20S",
+                "Concept_3: +0.38*F6S -0.30*F1S +0.28*F19R",
+                "Concept_4: +0.36*F8R +0.33*F9R +0.28*F8S",
+                "Concept_5: +0.34*F10R +0.32*F14R -0.31*F12S",
+                "Concept_6: +0.34*F4S -0.33*F18R +0.29*F4R"
+              ]
+            },
+            {
+              "K": 8,
+              "test_accuracy": 0.725,
+              "n_unique_directions": 8,
+              "n_splits": 15,
+              "direction_names": [
+                "Concept_1: +0.35*F22S +0.35*F21R +0.33*F22R",
+                "Concept_2: +0.38*F15S +0.37*F15R +0.30*F20S",
+                "Concept_3: +0.38*F6S -0.30*F1S +0.28*F19R",
+                "Concept_4: +0.36*F8R +0.33*F9R +0.28*F8S",
+                "Concept_5: +0.34*F10R +0.32*F14R -0.31*F12S",
+                "Concept_6: +0.34*F4S -0.33*F18R +0.29*F4R",
+                "Concept_7: +0.41*F17S -0.29*F10R +0.25*F15S",
+                "Concept_8: +0.33*F11R -0.29*F22R +0.28*F16S"
+              ]
+            },
+            {
+              "K": 10,
+              "test_accuracy": 0.725,
+              "n_unique_directions": 10,
+              "n_splits": 15,
+              "direction_names": [
+                "Concept_1: +0.35*F22S +0.35*F21R +0.33*F22R",
+                "Concept_2: +0.38*F15S +0.37*F15R +0.30*F20S",
+                "Concept_3: +0.38*F6S -0.30*F1S +0.28*F19R",
+                "Concept_4: +0.36*F8R +0.33*F9R +0.28*F8S",
+                "Concept_5: +0.34*F10R +0.32*F14R -0.31*F12S",
+                "Concept_6: +0.34*F4S -0.33*F18R +0.29*F4R",
+                "Concept_7: +0.41*F17S -0.29*F10R +0.25*F15S",
+                "Concept_8: +0.33*F11R -0.29*F22R +0.28*F16S",
+                "Concept_9: +0.42*F5R -0.37*F11S -0.35*F4R",
+                "Concept_10: +0.39*F12R -0.32*F2S +0.29*F12S"
+              ]
+            }
+          ]
+        }
+      },
+      "dataset": "imodels/tabular-benchmark-797-classification",
+      "split": "train",
+      "method": "dots_K5",
+      "predict_baseline": "1",
+      "predict_method": "1"
+    },
+    {
+      "input": "Classify the following tabular data sample:\n  F1R: 55.0406\n  F1S: 75.0266\n  F2R: 65.0128\n  F2S: 71.1990\n  F3R: 69.4850\n  F3S: 66.4147\n  F4R: 73.1449\n  F4S: 74.7500\n  F5R: 63.8450\n  F5S: 47.6606\n  F6R: 72.8461\n  F6S: 71.1422\n  F7R: 69.6858\n  F7S: 67.3014\n  F8R: 47.5818\n  F8S: 56.3173\n  F9R: 76.6928\n  F9S: 70.3933\n  F10R: 70.8567\n  F10S: 48.5733\n  F11R: 77.5861\n  F11S: 59.0773\n  F12R: 68.6536\n  F12S: 71.7236\n  F13R: 61.3199\n  F13S: 60.2484\n  F14R: 66.8094\n  F14S: 67.2172\n  F15R: 58.3083\n  F15S: 69.9283\n  F16R: 68.4924\n  F16S: 48.7263\n  F17R: 40.4029\n  F17S: 63.2953\n  F18R: 48.5840\n  F18S: 71.8782\n  F19R: 48.4719\n  F19S: 70.1526\n  F20R: 63.4131\n  F20S: 70.8567\n  F21R: 72.5930\n  F21S: 78.6215\n  F22R: 57.5543\n  F22S: 61.7349",
+      "output": "0",
+      "context": {
+        "features": {
+          "F1R": 55.040603,
+          "F1S": 75.026624,
+          "F2R": 65.012768,
+          "F2S": 71.199008,
+          "F3R": 69.484965,
+          "F3S": 66.414715,
+          "F4R": 73.144932,
+          "F4S": 74.749982,
+          "F5R": 63.844958,
+          "F5S": 47.660637,
+          "F6R": 72.84605,
+          "F6S": 71.142237,
+          "F7R": 69.685788,
+          "F7S": 67.301352,
+          "F8R": 47.581789,
+          "F8S": 56.317329,
+          "F9R": 76.692806,
+          "F9S": 70.393342,
+          "F10R": 70.856711,
+          "F10S": 48.573269,
+          "F11R": 77.586105,
+          "F11S": 59.077339,
+          "F12R": 68.653648,
+          "F12S": 71.723587,
+          "F13R": 61.319928,
+          "F13S": 60.248435,
+          "F14R": 66.80939,
+          "F14S": 67.217242,
+          "F15R": 58.308323,
+          "F15S": 69.928279,
+          "F16R": 68.492442,
+          "F16S": 48.726294,
+          "F17R": 40.402903,
+          "F17S": 63.295277,
+          "F18R": 48.584012,
+          "F18S": 71.878175,
+          "F19R": 48.471934,
+          "F19S": 70.152586,
+          "F20R": 63.41311,
+          "F20S": 70.856657,
+          "F21R": 72.593045,
+          "F21S": 78.62149,
+          "F22R": 57.554272,
+          "F22S": 61.734926
+        },
+        "n_features": 44,
+        "task_type": "binary_classification",
+        "dataset_source": "OpenML-797 benchmark suite",
+        "feature_type": "numeric",
+        "preprocessing": "none_needed_already_numeric"
+      },
+      "dataset": "imodels/tabular-benchmark-797-classification",
+      "split": "train",
+      "method": "dots_K5",
+      "predict_baseline": "1",
+      "predict_method": "1"
+    },
+    {
+      "input": "Classify the following tabular data sample:\n  F1R: 63.5548\n  F1S: 52.9832\n  F2R: 60.0778\n  F2S: 60.4591\n  F3R: 44.8623\n  F3S: 59.5678\n  F4R: 74.5612\n  F4S: 80.6465\n  F5R: 61.8002\n  F5S: 62.5087\n  F6R: 76.9168\n  F6S: 78.1991\n  F7R: 76.4126\n  F7S: 64.5148\n  F8R: 58.7545\n  F8S: 58.3087\n  F9R: 35.8513\n  F9S: 65.7192\n  F10R: 71.6888\n  F10S: 65.3054\n  F11R: 79.2821\n  F11S: 79.1235\n  F12R: 71.6487\n  F12S: 75.2248\n  F13R: 31.5327\n  F13S: 19.5726\n  F14R: 44.6842\n  F14S: 26.4458\n  F15R: 61.9523\n  F15S: 59.4719\n  F16R: 72.5759\n  F16S: 71.8393\n  F17R: 58.1855\n  F17S: 64.5165\n  F18R: 59.7496\n  F18S: 61.3222\n  F19R: 75.9075\n  F19S: 72.1122\n  F20R: 72.3178\n  F20S: 63.4827\n  F21R: 75.8465\n  F21S: 66.5678\n  F22R: 68.8849\n  F22S: 30.7395",
+      "output": "1",
+      "context": {
+        "features": {
+          "F1R": 63.554782,
+          "F1S": 52.983165,
+          "F2R": 60.077782,
+          "F2S": 60.459062,
+          "F3R": 44.862288,
+          "F3S": 59.567838,
+          "F4R": 74.561229,
+          "F4S": 80.646485,
+          "F5R": 61.800248,
+          "F5S": 62.50865,
+          "F6R": 76.91681,
+          "F6S": 78.199076,
+          "F7R": 76.412578,
+          "F7S": 64.514819,
+          "F8R": 58.754494,
+          "F8S": 58.308706,
+          "F9R": 35.851271,
+          "F9S": 65.71916,
+          "F10R": 71.688791,
+          "F10S": 65.305414,
+          "F11R": 79.282058,
+          "F11S": 79.123526,
+          "F12R": 71.648667,
+          "F12S": 75.224795,
+          "F13R": 31.532748,
+          "F13S": 19.572599,
+          "F14R": 44.684151,
+          "F14S": 26.44583,
+          "F15R": 61.952338,
+          "F15S": 59.471863,
+          "F16R": 72.575938,
+          "F16S": 71.839251,
+          "F17R": 58.185494,
+          "F17S": 64.516538,
+          "F18R": 59.749603,
+          "F18S": 61.322201,
+          "F19R": 75.907469,
+          "F19S": 72.112163,
+          "F20R": 72.317805,
+          "F20S": 63.482745,
+          "F21R": 75.846486,
+          "F21S": 66.567848,
+          "F22R": 68.884922,
+          "F22S": 30.739544
+        },
+        "n_features": 44,
+        "task_type": "binary_classification",
+        "dataset_source": "OpenML-797 benchmark suite",
+        "feature_type": "numeric",
+        "preprocessing": "none_needed_already_numeric"
+      },
+      "dataset": "imodels/tabular-benchmark-797-classification",
+      "split": "test",
+      "method": "dots_K5",
+      "predict_baseline": "1",
+      "predict_method": "1"
+    }
+  ]
+}
