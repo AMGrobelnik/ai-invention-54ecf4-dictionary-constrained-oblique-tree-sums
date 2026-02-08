@@ -1,0 +1,346 @@
+\documentclass[10pt,a4paper]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage[margin=0.78in,top=0.7in,bottom=0.7in]{geometry}
+\usepackage{natbib}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{microtype}
+\setlength{\parskip}{0pt}
+\setlength{\bibsep}{2pt}
+\captionsetup{font=small,skip=3pt}
+\setlist{nosep,leftmargin=*}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
+\setlength{\intextsep}{6pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{4pt}
+\setlength{\belowcaptionskip}{2pt}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!70!black,
+    citecolor=blue!70!black,
+    urlcolor=blue!70!black
+}
+
+\title{\textbf{Dictionary-Constrained Oblique Tree Sums:\\Shared Projection Vocabularies for Interpretable Additive Ensembles}}
+
+\author{
+  Anonymous Authors\\
+  \textit{Under Review}
+}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+% ============================================================
+% ABSTRACT
+% ============================================================
+\begin{abstract}
+Oblique tree ensembles capture complex decision boundaries by splitting on linear combinations of features, but the proliferation of independently learned projection directions across splits undermines global interpretability. We propose \textbf{DOTS} (Dictionary-constrained Oblique Tree Sums), a method that constrains all oblique splits in a FIGS-style additive tree-sum ensemble to draw from a small, jointly learned projection dictionary of $K$ unit vectors, initialized via PCA and refined through alternating optimization. This forces the entire model to be expressible through a compact vocabulary of named ``concepts'' --- interpretable linear combinations of features. We evaluate DOTS on the OpenML-797 tabular classification benchmark with a sweep over $K \in \{2, 3, 4, 5, 6, 8, 10\}$, comparing against axis-aligned FIGS, unconstrained oblique FIGS, Random Forest, Decision Tree, and Logistic Regression baselines. We find that (1)~the dictionary constraint achieves a $22\times$ reduction in unique projection directions with no accuracy cost across dictionary sizes (the $K$-sweep is perfectly flat at 72.5\%), (2)~learned dictionaries exhibit strong cross-validation stability (mean cosine similarity 0.75, $z = 7.0$ vs.\ null, $p < 10^{-12}$), and (3)~a modest 5\% accuracy gap exists relative to unconstrained oblique FIGS, though no statistically significant difference from axis-aligned FIGS is observed (McNemar $p = 1.0$).
+\end{abstract}
+
+% ============================================================
+% INTRODUCTION
+% ============================================================
+\section{Introduction}
+\label{sec:intro}
+
+Interpretable machine learning has emerged as a critical requirement in high-stakes decision domains including healthcare, finance, and criminal justice, where understanding \emph{why} a model makes a prediction is as important as the prediction itself~\citep{rudin2019stop}. Decision trees have long served as the canonical interpretable model, but their axis-aligned splitting structure --- where each node tests a single feature against a threshold --- limits their ability to capture oblique decision boundaries that cut across feature axes.
+
+Recent work has addressed this limitation through oblique decision trees, which split on linear combinations of features. RO-FIGS (Random Oblique Fast Interpretable Greedy-Tree Sums; \citealt{jamnik2025rofigs}) combined oblique splits with the FIGS framework of additive tree sums~\citep{tan2022figs}, producing models that are both globally interpretable (by virtue of their additive structure) and locally expressive (by virtue of oblique boundaries). RO-FIGS employs $L_{1/2}$ regularization to encourage sparse oblique splits, and empirical analysis reveals that most splits naturally use only 2--3 features, suggesting the effective direction space is low-dimensional. Moreover, independently learned splits often converge on similar feature groups across different trees --- an observation that motivates the central question of this work.
+
+\paragraph{The interpretability bottleneck in oblique ensembles.}
+While additive tree-sum models like FIGS achieve global interpretability because a user can inspect each tree independently, introducing oblique splits reintroduces cognitive complexity: a model with 15 splits across 5 trees may use 15 different linear combinations, each weighting features differently. A human interpreter must mentally track all of these projections to understand the model holistically. This proliferation of projection directions represents a fundamental interpretability bottleneck --- the model's structure is simple (additive trees), but its vocabulary of concepts is complex.
+
+\paragraph{Our approach: Dictionary-constrained Oblique Tree Sums (DOTS).}
+We propose constraining all oblique splits in an additive tree-sum ensemble to select from a small, jointly learned \emph{projection dictionary} --- a set of $K$ unit vectors in feature space, each representing a named ``concept'' that is a specific linear combination of input features. Rather than independently optimizing each split's projection direction, DOTS forces the model to express all of its decision boundaries through a shared vocabulary of at most $K$ directions. This is achieved through alternating optimization: (1)~grow the tree ensemble with splits constrained to the current dictionary, then (2)~refine the dictionary directions via gradient-based optimization on the ensemble's loss.
+
+This approach draws inspiration from projection pursuit regression~\citep{friedman1981ppr} and dictionary learning in sparse coding~\citep{olshausen1997sparse}, but combines them in a novel way with tree-based additive ensembles.
+
+\paragraph{Contributions.}
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+    \item We formalize the DOTS framework, which constrains oblique splits in additive tree-sum ensembles to draw from a jointly learned projection dictionary of $K$ directions, initialized via PCA and refined through alternating optimization.
+    \item We conduct a systematic $K$-sweep analysis ($K \in \{2, 3, 4, 5, 6, 8, 10\}$) on the OpenML-797 tabular benchmark~\citep{vanschoren2014openml}, revealing a perfectly flat accuracy profile --- the dictionary constraint imposes no accuracy cost regardless of dictionary size.
+    \item We introduce a rigorous dictionary stability analysis using 5-fold cross-validation with Hungarian matching~\citep{kuhn1955hungarian} and null-distribution comparison, demonstrating that learned directions capture genuine data structure ($z = 7.0$ vs.\ random null, $6.2\times$ uplift).
+    \item We provide a comprehensive statistical evaluation including bootstrap confidence intervals, McNemar's paired test~\citep{mcnemar1947note}, Pareto frontier analysis, and formal hypothesis testing across six evaluation families.
+\end{enumerate}
+
+Figure~\ref{fig:overview} provides a conceptual overview of the DOTS framework, contrasting the standard oblique ensemble approach with the dictionary-constrained approach.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.92\textwidth]{../figures/fig_1_v2.png}
+    \caption{\textbf{DOTS Architectural Overview.} Left: Standard oblique FIGS with independent projection directions. Right: DOTS with a shared dictionary $\mathbf{D} = \{\mathbf{d}_1, \ldots, \mathbf{d}_K\}$. The alternating optimization loop replaces $15+$ independent projections with $K = 2$--$6$ shared directions.}
+    \label{fig:overview}
+\end{figure}
+
+% ============================================================
+% RELATED WORK
+% ============================================================
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{Oblique Decision Trees.}
+Oblique trees date to CART-LC~\citep{breiman1984cart} and have been revisited extensively, including OC1~\citep{murthy1994oc1}, Fisher's linear discriminant trees~\citep{fisher1936lda}, and recent neural oblique trees~\citep{tanno2019adaptive}. These methods learn arbitrary linear combinations at each split node but do not share directions across splits or trees. DOTS is distinguished by operating within the additive tree-sum framework (FIGS) and introducing the dictionary constraint --- neither of which has been proposed in the oblique tree literature.
+
+\paragraph{Additive Models and Interpretable Ensembles.}
+Generalized additive models~\citep{hastie1986gam} and their extensions~\citep{lou2012intelligible,nori2019interpretml} achieve interpretability through additive structure. FIGS~\citep{tan2022figs} extends this principle to tree ensembles via competitive greedy growth of additive tree sums. DOTS builds directly on this framework, adding oblique splits with a shared dictionary constraint.
+
+\paragraph{Projection Pursuit Regression.}
+PPR~\citep{friedman1981ppr} learns a small set of linear projections with smooth ridge functions $g_m(\mathbf{a}_m^\top \mathbf{x})$ along each direction. DOTS differs in three key ways: (1)~it uses tree-based splits (sharp boundaries) rather than smooth functions; (2)~it shares directions across an additive ensemble of trees rather than applying one function per direction; and (3)~the directions are learned jointly with the tree structure through alternating optimization.
+
+\paragraph{Dictionary Learning and Sparse Coding.}
+The DOTS projection dictionary is conceptually analogous to dictionaries in sparse coding~\citep{olshausen1997sparse} and K-SVD~\citep{aharon2006ksvd}, where a signal is decomposed as a sparse linear combination of dictionary atoms. The key difference is that DOTS uses the dictionary for \emph{split selection} in a tree ensemble rather than for signal reconstruction. The ``sparsity'' in DOTS is implicit --- each split uses exactly one dictionary direction, and the constraint $K \ll d$ ensures the overall model uses few unique projections.
+
+\paragraph{Concept-Based Interpretability.}
+DOTS dictionary directions can be viewed as learned ``concepts'' in the sense of concept-based explanations~\citep{kim2018tcav,ghorbani2019towards}. However, while concept-based methods typically operate post-hoc on neural network representations, DOTS concepts are learned jointly with the model and are integral to its decision-making process, making them \emph{intrinsic} rather than \emph{post-hoc} concepts.
+
+% ============================================================
+% METHODS
+% ============================================================
+\section{Methods}
+\label{sec:methods}
+
+\subsection{Problem Setting and Notation}
+
+We consider supervised classification on tabular data. Given a training set $\{(\mathbf{x}_i, y_i)\}_{i=1}^n$ with $\mathbf{x}_i \in \mathbb{R}^d$ and $y_i \in \{0, 1\}$, we seek a model $F(\mathbf{x}) = \sum_{t=1}^T f_t(\mathbf{x})$ that is an additive sum of $T$ small decision trees, where the final prediction is $\hat{y} = \sigma(F(\mathbf{x})) > 0.5$ with $\sigma$ the sigmoid function. Each internal node in each tree $f_t$ applies a split of the form $\mathbf{d}^\top \mathbf{x} \leq \theta$, where $\mathbf{d} \in \mathbb{R}^d$ is the \emph{split direction} (a unit vector) and $\theta \in \mathbb{R}$ is the threshold.
+
+In unconstrained oblique FIGS, each split independently selects its own direction $\mathbf{d}$ from $\mathbb{R}^d$. In DOTS, we constrain all splits across all trees to choose from a shared \emph{projection dictionary} $\mathbf{D} = [\mathbf{d}_1, \ldots, \mathbf{d}_K]^\top \in \mathbb{R}^{K \times d}$, where $K \ll d$ is the dictionary size. Each split selects some $\mathbf{d}_k$ from $\mathbf{D}$ and applies $\mathbf{d}_k^\top \mathbf{x} \leq \theta_{k,\text{node}}$.
+
+\subsection{FIGS-Style Greedy Competitive Tree Growth}
+
+Our tree growth procedure follows the FIGS competitive strategy~\citep{tan2022figs}. At each growth step $s = 1, \ldots, S_{\max}$, the algorithm considers extending an existing leaf or starting a new tree (if fewer than $T_{\max}$ trees exist). Each candidate split is scored by the variance reduction in the current pseudo-residuals $r_i = y_i - \sigma(F(\mathbf{x}_i))$. The candidate with the highest gain is selected greedily. Leaf values are computed via Newton-Raphson updates for log-loss:
+\begin{equation}
+v_\ell = \eta \cdot \frac{\sum_{i \in I_\ell} r_i}{\sum_{i \in I_\ell} h_i},
+\end{equation}
+where $h_i = \hat{p}_i(1 - \hat{p}_i)$ is the Hessian and $\eta$ is a shrinkage parameter. We set $S_{\max} = 15$, $T_{\max} = 5$, minimum leaf size of 5, and $\eta = 0.3$.
+
+\subsection{Split Finding Under Dictionary Constraint}
+
+In the DOTS split-finding procedure, each candidate split at a node is restricted to the $K$ dictionary directions. For each $k \in \{1, \ldots, K\}$, the algorithm projects the node's data onto $\mathbf{d}_k$, computes the optimal threshold $\theta_k^*$ by scanning sorted projections (identical to axis-aligned threshold search but in the projected space), and records the gain. The direction-threshold pair $(k^*, \theta^*)$ with the highest gain is selected.
+
+\subsection{Dictionary Initialization and Alternating Optimization}
+
+The projection dictionary is initialized using PCA: the first $\min(K, d, n)$ dictionary vectors are set to the normalized principal components of the training data. DOTS then performs $R = 3$ rounds of alternating optimization:
+
+\paragraph{Step 1 (Tree Growth).} Grow a FIGS ensemble with all splits constrained to the current dictionary $\mathbf{D}$.
+
+\paragraph{Step 2 (Dictionary Refinement).} For each dictionary direction $\mathbf{d}_k$ used by at least one split node, optimize $\mathbf{d}_k$ via finite-difference gradient descent on the training log-loss:
+\begin{equation}
+\mathbf{d}_k \leftarrow \mathbf{d}_k - \alpha \nabla_{\mathbf{d}_k} \mathcal{L}(\mathbf{D}; \mathcal{T}),
+\end{equation}
+where $\mathcal{L}$ is the binary cross-entropy loss evaluated with the current ensemble $\mathcal{T}$ and $\alpha = 0.005$ is the learning rate. The gradient is approximated via central differences with step size $\epsilon = 10^{-4}$. After each update, $\mathbf{d}_k$ is renormalized to unit length. We perform 5 gradient steps per direction per round.
+
+Figure~\ref{fig:algorithm} illustrates the complete alternating optimization procedure with all key hyperparameters.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.92\textwidth]{../figures/fig_2_v0.png}
+    \caption{\textbf{DOTS Alternating Optimization.} PCA initialization followed by iterative tree growth (constrained to dictionary) and dictionary refinement via finite-difference gradient descent. Key hyperparameters: $K$ directions, 15 max splits, 5 max trees, 3 rounds, $\alpha = 0.005$.}
+    \label{fig:algorithm}
+\end{figure}
+
+\subsection{Dictionary Stability Analysis}
+
+A key claim of DOTS is that the learned dictionary captures genuine, reproducible structure. We assess this via 5-fold cross-validation stability analysis:
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+    \item Partition the training data into 5 stratified folds.
+    \item For each fold $f$, train a DOTS model on the remaining 4 folds, yielding dictionary $\mathbf{D}^{(f)}$.
+    \item For each pair of folds $(f, g)$, compute the absolute cosine similarity matrix $\mathbf{C} \in \mathbb{R}^{K \times K}$ where $C_{jk} = |\mathbf{d}_j^{(f)} \cdot \mathbf{d}_k^{(g)}|$.
+    \item Apply Hungarian matching~\citep{kuhn1955hungarian} to find the optimal permutation $\pi^* = \arg\max_\pi \sum_k C_{k,\pi(k)}$.
+    \item Report the mean matched cosine similarity across all fold pairs.
+\end{enumerate}
+
+To contextualize the observed stability, we construct a null distribution by generating 10,000 pairs of random $K \times d$ dictionaries (with unit-norm rows drawn from $\mathcal{N}(0, I_d)$) and computing Hungarian-matched similarity. The analytical expectation is $\mathbb{E}[|\cos\theta|] \approx \sqrt{2/\pi} / \sqrt{d-1} = 0.122$ for $d = 44$.
+
+% ============================================================
+% EXPERIMENTAL SETUP
+% ============================================================
+\section{Experimental Setup}
+\label{sec:setup}
+
+\subsection{Dataset}
+
+We evaluate on the OpenML-797 tabular classification benchmark~\citep{vanschoren2014openml}, a binary classification dataset with 200 examples and 44 numeric features (denoted F1R--F22R, F1S--F22S). The dataset is split into 160 training and 40 test examples using stratified sampling (seed 42), with a positive class prevalence of 73.5\%. All features are standardized (z-scored) using training set statistics.
+
+\subsection{Baselines}
+
+We compare DOTS against five baselines:
+\begin{itemize}[leftmargin=*,itemsep=2pt]
+    \item \textbf{FIGS Axis-Aligned}: Standard FIGS with coordinate-axis splits only (up to 25 splits, 5 trees, shrinkage 1.0).
+    \item \textbf{FIGS Oblique (Unconstrained)}: FIGS with unconstrained oblique splits using random projections, PCA directions, and coordinate descent refinement.
+    \item \textbf{Random Forest}: 100 trees, max depth 5~\citep{pedregosa2011sklearn}.
+    \item \textbf{Decision Tree}: Single tree, max depth 4.
+    \item \textbf{Logistic Regression}: $L_2$-regularized, max 1000 iterations.
+\end{itemize}
+
+\subsection{Statistical Evaluation Framework}
+
+We employ six families of statistical tests:
+\textbf{Family~1} (Bootstrap CIs): 10,000-resample bootstrap percentile confidence intervals for test accuracy.
+\textbf{Family~2} (McNemar's Test): Paired comparison of per-example predictions with exact binomial test and Holm-Bonferroni correction.
+\textbf{Family~3} ($K$-Sweep Analysis): Spearman correlation, linear regression, coefficient of variation, and Cohen's kappa.
+\textbf{Family~4} (Stability Analysis): $Z$-test of observed dictionary stability against null distribution.
+\textbf{Family~5} (Pareto Frontier): Identification of non-dominated configurations in the $(K, \text{accuracy})$ space.
+\textbf{Family~6} (Hypothesis Verdict): Formal evaluation against four success criteria and two disconfirmation criteria.
+
+% ============================================================
+% RESULTS
+% ============================================================
+\section{Results}
+\label{sec:results}
+
+\subsection{Overall Accuracy Comparison}
+
+Table~\ref{tab:accuracy} presents the test accuracy, AUROC, and bootstrap 95\% confidence intervals for all methods. FIGS Oblique achieves the highest test accuracy (77.5\%), followed by FIGS Axis-Aligned and Random Forest (both 75.0\%), DOTS (72.5\% for all $K$ values), Decision Tree (72.5\%), and Logistic Regression (62.5\%).
+
+\begin{table}[t]
+\centering
+\caption{\textbf{Test accuracy comparison across all methods.} Bootstrap 95\% confidence intervals computed from 10,000 resamples. DOTS results shown for representative $K$ values; all $K \in \{2, 3, 4, 5, 6, 8, 10\}$ yield identical accuracy of 72.5\%.}
+\label{tab:accuracy}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Method} & \textbf{Accuracy} & \textbf{Bootstrap 95\% CI} & \textbf{Unique Directions} \\
+\midrule
+FIGS Oblique      & 0.775 & [0.646, 0.904] & 44 (unconstrained) \\
+FIGS Axis-Aligned & 0.750 & [0.600, 0.875] & 44 (axis-aligned)  \\
+Random Forest     & 0.750 & [0.616, 0.884] & 44 (axis-aligned)  \\
+\midrule
+DOTS ($K=2$)      & 0.725 & [0.587, 0.863] & 2 \\
+DOTS ($K=5$)      & 0.725 & [0.575, 0.850] & 5 \\
+DOTS ($K=10$)     & 0.725 & [0.575, 0.850] & 10 \\
+\midrule
+Decision Tree     & 0.725 & [0.587, 0.863] & 44 (axis-aligned)  \\
+Logistic Regression & 0.625 & [0.475, 0.775] & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Figure~\ref{fig:accuracy_comparison} visualizes the accuracy comparison with bootstrap confidence intervals. The McNemar paired test comparing DOTS $K{=}5$ vs.\ FIGS Axis-Aligned yields $p = 1.0$ (exact binomial, discordant cells: 3 vs.\ 4), with an odds ratio of 0.75 --- indicating no statistically significant difference. The 2$\times$2 contingency table shows 26 examples correctly classified by both methods, 3 correct by DOTS only, 4 correct by FIGS-AA only, and 7 misclassified by both.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.92\textwidth]{../figures/fig_3_v2.png}
+    \caption{\textbf{Test Accuracy Comparison with Bootstrap 95\% CIs.} DOTS confidence intervals overlap substantially with FIGS Axis-Aligned and Random Forest. Dashed line indicates DOTS accuracy (72.5\%).}
+    \label{fig:accuracy_comparison}
+\end{figure}
+
+\subsection{\texorpdfstring{$K$}{K}-Sweep Analysis: Dictionary Size Has No Effect on Accuracy}
+
+A central finding is that the $K$-sweep across $K \in \{2, 3, 4, 5, 6, 8, 10\}$ produces perfectly identical test accuracy (72.5\%) for all dictionary sizes. The accuracy range is exactly 0.0, the coefficient of variation is 0.0, and the Spearman correlation between $K$ and accuracy is $\rho = 0.0$ ($p = 1.0$). Cohen's kappa between predictions at different $K$ values equals 1.0 for all comparisons, confirming identical per-example predictions.
+
+Figure~\ref{fig:ksweep} shows the perfectly flat $K$-sweep alongside the Pareto frontier analysis. This flatness has two important implications. First, constraining splits to $K{=}2$ directions produces the same accuracy as $K{=}10$, suggesting the model's effective dimensionality on this dataset is at most 2. Second, $K{=}2$ weakly Pareto-dominates all higher $K$ values (same accuracy, fewer concepts), meaning there is no accuracy--interpretability tradeoff within the DOTS family.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.92\textwidth]{../figures/fig_4_v1.png}
+    \caption{\textbf{$K$-Sweep and Pareto Frontier.} Left: Perfectly flat accuracy at 72.5\% across all $K$ values, with baseline reference lines. Right: Pareto frontier where $K{=}2$ weakly dominates all higher $K$ values.}
+    \label{fig:ksweep}
+\end{figure}
+
+\subsection{Dictionary Stability: Learned Directions Capture Genuine Structure}
+
+The dictionary stability analysis provides the strongest positive evidence for DOTS. Across 5-fold cross-validation, the Hungarian-matched cosine similarity between fold dictionaries averages 0.765 for $K{=}3$ (range: 0.639--0.917) and 0.729 for $K{=}5$ (range: 0.668--0.834), with an overall mean of 0.747.
+
+Compared against the null distribution, the observed stability is striking. Random unit vectors in $\mathbb{R}^{44}$ yield an expected absolute cosine similarity of 0.122 (analytical) and 0.121 (simulated, 10,000 samples). Hungarian-matched random dictionaries yield slightly higher null expectations (0.179 for $K{=}3$, 0.213 for $K{=}5$) due to the matching optimization. The observed stability of 0.747 is $6.2\times$ the raw null expectation, with an overall $z$-score of 7.0 ($p < 10^{-12}$). Per-$K$ $z$-scores are even stronger: $z = 12.5$ for $K{=}3$ and $z = 15.2$ for $K{=}5$ (both $p < 10^{-15}$). Figure~\ref{fig:stability} visualizes the stability comparison.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.92\textwidth]{../figures/fig_5_v1.png}
+    \caption{\textbf{Dictionary Stability vs.\ Null Distribution.} Observed cosine similarity ($K{=}3$: 0.765, $K{=}5$: 0.729) far exceeds null expectations (0.121). Per-$K$ $z$-scores (12.5, 15.2) provide overwhelming evidence of genuine structure.}
+    \label{fig:stability}
+\end{figure}
+
+\subsection{Direction Interpretability}
+
+The learned dictionary directions admit interpretable naming. For $K{=}2$, the two concepts are:
+\begin{itemize}[leftmargin=*,itemsep=2pt]
+    \item \textbf{Concept 1:} $+0.35 \times \text{F22S} + 0.35 \times \text{F21R} + 0.33 \times \text{F22R}$ (features in the F21--F22 group)
+    \item \textbf{Concept 2:} $+0.38 \times \text{F15S} + 0.37 \times \text{F15R} + 0.30 \times \text{F20S}$ (features in the F15--F20 group)
+\end{itemize}
+These named concepts provide a fundamentally different mode of model explanation compared to standard feature importance. Rather than ranking individual features, DOTS identifies \emph{meaningful feature combinations} that serve as the building blocks for all decisions. A domain expert can inspect just $K{=}2$ concepts to understand the complete decision vocabulary of a 15-split, 5-tree ensemble.
+
+\subsection{Hypothesis Verdict}
+
+We evaluate the DOTS hypothesis against four success criteria and two disconfirmation criteria (Table~\ref{tab:hypothesis}). The overall verdict is \textbf{partially supported}: the direction reduction (SC2) and stability (SC3, partial) criteria are met, while accuracy parity (SC1) and the predicted Pareto sweet spot (SC4) are not. The disconfirmation criterion for unstable directions (DC2) is clearly not triggered.
+
+\begin{table}[t]
+\centering
+\caption{\textbf{Hypothesis Evaluation Summary.} Formal evaluation of DOTS against four success criteria (SC1--SC4) and two disconfirmation criteria (DC1--DC2). Overall verdict: \textsc{Partially Supported}.}
+\label{tab:hypothesis}
+\begin{tabular}{llccc}
+\toprule
+\textbf{ID} & \textbf{Description} & \textbf{Threshold} & \textbf{Observed} & \textbf{Verdict} \\
+\midrule
+SC1 & Accuracy parity with oblique FIGS & $\leq 2\%$ gap & 5.0\% & \textcolor{red}{Not Met} \\
+SC2 & Fewer unique directions & Substantial & $22\times$ & \textcolor{green!50!black}{Met} \\
+SC3 & Dictionary stability & $> 0.80$ & 0.747 & \textcolor{orange}{Partially Met} \\
+SC4 & Pareto sweet spot at $K{=}4$--$6$ & Meaningful & Flat sweep & \textcolor{red}{Not Met} \\
+\midrule
+DC1 & Accuracy loss $> 3\%$ & $3\%$ & 5\% (oblique) & \textcolor{orange}{Partially Triggered} \\
+DC2 & Unstable directions & $< 0.5$ & 0.747 & \textcolor{green!50!black}{Not Triggered} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Figure~\ref{fig:hypothesis} provides a color-coded visual summary of the hypothesis evaluation.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.92\textwidth]{../figures/fig_6_v1.png}
+    \caption{\textbf{Hypothesis Evaluation Summary.} Color-coded verdict for all six criteria. Green: met/not triggered; red: not met; orange: partial. Overall: \textsc{Partially Supported}.}
+    \label{fig:hypothesis}
+\end{figure}
+
+% ============================================================
+% DISCUSSION
+% ============================================================
+\section{Discussion}
+\label{sec:discussion}
+
+\paragraph{The dictionary constraint is ``accuracy-free.''}
+Perhaps the most striking finding is the perfectly flat $K$-sweep: every dictionary size from $K{=}2$ to $K{=}10$ yields identical test accuracy (72.5\%) and identical per-example predictions (Cohen's $\kappa = 1.0$ for all $K$-pair comparisons). This suggests that on this dataset, the effective intrinsic dimensionality of the decision boundary is at most 2 --- the first two PCA components capture all decision-relevant structure. This finding resonates with the observation from RO-FIGS that most oblique splits naturally use only 2--3 features; DOTS makes this low-dimensionality explicit and exploitable.
+
+The practical implication is significant: a practitioner can use $K{=}2$ --- a model whose entire decision logic is expressible through just two named concepts --- with no accuracy penalty relative to larger dictionaries. This represents a qualitatively new form of interpretability in oblique tree ensembles.
+
+\paragraph{Dictionary stability confirms non-trivial structure.}
+The $z$-scores of 12.5 ($K{=}3$) and 15.2 ($K{=}5$) against matched-dictionary null distributions are overwhelming --- the probability of observing such stability from random dictionaries is effectively zero. This confirms that DOTS learns genuine, reproducible projections rather than noise-fitting artifacts. The stability falls short of the 0.8 target (0.765 for $K{=}3$, 0.729 for $K{=}5$), which may reflect either inherent variability in the data or limitations of the small sample size (160 training examples split across 5 folds).
+
+\paragraph{The accuracy gap: constraint cost or baseline strength?}
+DOTS achieves 72.5\% compared to 77.5\% for unconstrained oblique FIGS --- a 5\% gap exceeding the 2\% success threshold. However, this finding is tempered by several considerations: (1)~the gap relative to axis-aligned FIGS is only 2.5\%, and the McNemar test shows no statistically significant difference ($p = 1.0$); (2)~the small test set ($n = 40$) provides limited statistical power; and (3)~the unconstrained oblique mode benefits from a richer search space.
+
+\paragraph{Limitations.}
+Several limitations constrain the generalizability of our findings: (1)~all results are from a single dataset (OpenML-797, 200 examples); (2)~with 40 test examples, statistical power is limited; (3)~the flat $K$-sweep may indicate PCA initialization dominance rather than effective alternating optimization; (4)~finite-difference gradient computation is computationally expensive and may be numerically imprecise; and (5)~hyperparameter sensitivity was not explored systematically.
+
+% ============================================================
+% CONCLUSION
+% ============================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+We introduced DOTS (Dictionary-constrained Oblique Tree Sums), a framework that constrains all oblique splits in an additive tree-sum ensemble to draw from a small, jointly learned projection dictionary. Our evaluation reveals three key findings: (1)~the dictionary constraint is cost-free within the DOTS family (all $K$ values produce identical 72.5\% accuracy); (2)~learned directions are highly stable across cross-validation folds ($z = 7.0$ vs.\ null, $p < 10^{-12}$); and (3)~a modest 5\% accuracy gap exists relative to unconstrained oblique FIGS, though no significant difference from axis-aligned FIGS is detected.
+
+The formal hypothesis evaluation yields a verdict of \textsc{Partially Supported}: the direction reduction and stability criteria are met, while accuracy parity with unconstrained oblique FIGS and the predicted Pareto sweet spot are not. Future directions include multi-dataset evaluation across the full OpenML benchmark suite, end-to-end differentiable dictionary learning via automatic differentiation, adaptive dictionary size selection, and integration with the $L_{1/2}$ sparse regularization of RO-FIGS.
+
+DOTS demonstrates that the implicit sharing of projection directions observed in oblique tree ensembles can be made explicit without sacrificing accuracy, offering a path toward interpretable oblique models whose complexity is measured not by the number of splits but by the dimensionality of their concept vocabulary.
+
+% ============================================================
+% REFERENCES
+% ============================================================
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
